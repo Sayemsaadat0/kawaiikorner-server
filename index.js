@@ -1,6 +1,6 @@
 const express=require('express');
 const cors=require('cors');
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const app=express();
 require('dotenv').config();
 const port=process.env.PORT || 5000;
@@ -61,9 +61,52 @@ async function run() {
     const result = await toyCollection.find().toArray()
     res.send(result)
    })
+
+
+   
+// deelete
+app.delete('/addtoy/:id', async(req, res)=>{
+  const id = req.params.id
+  const query = {id_ : new ObjectId(id)}
+  const result = await toyCollection.deleteOne(query)
+  res.send(result)
+
+})
+
+
+// update 
+app.patch('/addtoy/:id', async(req, res)=>{
+  const id = req.params.id 
+  const filter = { _id: new ObjectId(id)}
+  const updatedToy = req.body
+  const updateDoc = {
+    $set: {
+    status : updatedToy.status
+    },
+  };
+console.log(updatedToy)
+const result = await bookingCollection.updateOne(filter,updateDoc)
+res.send(result)
+})
+
+
+
+
             
-            
-    
+/*             
+   app.get('/addtoy/:id', async (req, res) => {
+    let query = {};
+    if(req.query.id){
+        query={
+            id: req.query.id
+        }
+    }
+    const cursor = toyCollection.find(query);
+    const reviews = await cursor.toArray();
+    res.send(reviews);
+});
+ */
+
 
 
       // sub category 
@@ -73,15 +116,23 @@ async function run() {
         res.send(result)
       })
 
-
-
-
-      app.get('/subtoy/:name' , async (req , res ) => {
-        const name=req.query.name
-        const query= {name: name} 
+      app.get('/subToy' , async (req , res ) => {
+        const sub_category=req.query. sub_category
+        const query= {sub_category : sub_category} 
         const result =await subcatdetails.find(query).toArray()
         res.send(result)
       })
+
+
+
+
+
+
+
+
+
+
+
 
      await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
