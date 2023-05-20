@@ -29,7 +29,7 @@ async function run() {
     await client.connect();
 
 
-    const categoryCollection= client.db('kawaidb').collection('categories')
+    // const categoryCollection= client.db('kawaidb').collection('categories')
     // Add to data toy collection
     const toyCollection= client.db('kawaidb').collection('toy')
 
@@ -65,6 +65,22 @@ async function run() {
    })
  */
 
+  //  search toyCollection
+
+  app.get('/search', async (req, res) => {
+    const toyName = req.query.toyName;
+    const query = { toyName: toyName };
+    const result = await toyCollection.find(query).toArray();
+    res.send(result);
+});
+
+app.get('/toyData/:id', async(req, res)=>{
+  const id=req.params.id;
+  const query={_id: new ObjectId(id)};
+  const result=await toyCollection.findOne(query);
+  res.send(result);
+})
+
    
 // deelete
 app.delete('/addtoy/:id', async(req, res)=>{
@@ -77,17 +93,18 @@ app.delete('/addtoy/:id', async(req, res)=>{
 
 
 // update 
-app.patch('/addtoy/:id', async(req, res)=>{
+app.patch('/updateToy/:id', async(req, res)=>{
   const id = req.params.id 
   const filter = { _id: new ObjectId(id)}
-  const updatedToy = req.body
+  const data = req.body;
+  const option= {upsert:true};
   const updateDoc = {
     $set: {
-    status : updatedToy.status
+    status : data.status
     },
   };
-console.log(updatedToy)
-const result = await bookingCollection.updateOne(filter,updateDoc)
+console.log(data)
+const result = await toyCollection.updateOne(filter,updateDoc,option )
 res.send(result)
 })
 
@@ -118,21 +135,12 @@ res.send(result)
         res.send(result)
       })
 
-      app.get('/subToy' , async (req , res ) => {
-        const sub_category=req.query. sub_category
+      app.get('/category' , async (req , res ) => {
+        const sub_category=req.query.sub_category
         const query= {sub_category : sub_category} 
         const result =await subcatdetails.find(query).toArray()
         res.send(result)
       })
-
-
-
-
-
-
-
-
-
 
 
 
