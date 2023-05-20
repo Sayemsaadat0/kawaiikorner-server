@@ -13,7 +13,7 @@ app.use(cors());
 
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.njebycd.mongodb.net/?retryWrites=true&w=majority`
-console.log(uri);
+// console.log(uri);
 
 const client = new MongoClient(uri, {
   serverApi: {
@@ -26,10 +26,19 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     await client.connect();
+    const categoryCollection= client.db('kawaidb').collection('categories')
+    const toyCollection= client.db('kawaidb').collection('toy')
+
+    app.post('/addtoy', async(req,res)=>{
+      const data=req.body;
+      const result= await toyCollection.insertOne(data);
+      res.send(result)
+      })
 
 
     
-  } finally {
+  } 
+  finally {
     
   }
 }
