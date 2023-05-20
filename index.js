@@ -33,8 +33,6 @@ async function run() {
     // Add to data toy collection
     const toyCollection= client.db('kawaidb').collection('toy')
 
-
-
     const subCatName= client.db('kawaidb').collection('subCategoryName')
     const subcatdetails= client.db('kawaidb').collection('subCategoryDetails')
 
@@ -51,37 +49,39 @@ async function run() {
 
    // show all toy to the alltoy page what we addeded in add a toy page
    app.get('/addtoy', async (req, res)=>{
-    console.log(req.query)
+    // console.log(req.query?.Seller_email)
      let query = {}
-    if(req.query?.email){
-      query = {email: req.query.Seller_email} } 
+   if(req.query?.email){
+      query = {Seller_email: req.query.email} } 
     const result = await toyCollection.find(query).toArray()
     res.send(result)
           })
+
+    app.get('/addtoy', async (req, res)=>{
+    const result = await toyCollection.find().toArray()
+    res.send(result)
+   })
+            
+            
     
 
 
       // sub category 
       app.get('/subToy', async(req, res)=>{
-        console.log(req.query)
-        const cursor = subCatName.find() 
-        const result = await cursor.toArray()
+        const query = {}
+        const result = await subCatName.find(query).toArray()
         res.send(result)
       })
+
+
+
 
       app.get('/subtoy/:name' , async (req , res ) => {
         const name=req.query.name
-        const query= {name: name}
-        const result =await categoryDetailsCollection.find(query).toArray()
+        const query= {name: name} 
+        const result =await subcatdetails.find(query).toArray()
         res.send(result)
       })
-
-
-
-
-
-
-
 
      await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
