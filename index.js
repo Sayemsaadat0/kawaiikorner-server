@@ -51,17 +51,19 @@ async function run() {
    app.get('/addtoy', async (req, res)=>{
     // console.log(req.query?.Seller_email)
      let query = {}
+  
    if(req.query?.email){
       query = {Seller_email: req.query.email} } 
     const result = await toyCollection.find(query).toArray()
     res.send(result)
           })
 
-    app.get('/addtoy', async (req, res)=>{
+
+   /*  app.get('/addtoy', async (req, res)=>{
     const result = await toyCollection.find().toArray()
     res.send(result)
    })
-
+ */
 
    
 // deelete
