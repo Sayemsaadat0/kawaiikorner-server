@@ -2,6 +2,7 @@ const express=require('express');
 const cors=require('cors');
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const app=express();
+const galarry = require('./Data/Gallary.json');
 require('dotenv').config();
 const port=process.env.PORT || 5000;
 
@@ -26,7 +27,7 @@ const client = new MongoClient(uri, {
 
 async function run() {
   try {
-    await client.connect();
+     client.connect();
 
 
     // const categoryCollection= client.db('kawaidb').collection('categories')
@@ -59,11 +60,7 @@ async function run() {
           })
 
 
-   /*  app.get('/addtoy', async (req, res)=>{
-    const result = await toyCollection.find().toArray()
-    res.send(result)
-   })
- */
+ 
 
   //  search toyCollection
 
@@ -112,19 +109,6 @@ res.send(result)
 
 
             
-/*             
-   app.get('/addtoy/:id', async (req, res) => {
-    let query = {};
-    if(req.query.id){
-        query={
-            id: req.query.id
-        }
-    }
-    const cursor = toyCollection.find(query);
-    const reviews = await cursor.toArray();
-    res.send(reviews);
-});
- */
 
 
 
@@ -138,6 +122,7 @@ res.send(result)
       app.get('/category' , async (req , res ) => {
         const sub_category=req.query.sub_category
         const query= {sub_category : sub_category} 
+
         const result =await subcatdetails.find(query).toArray()
         res.send(result)
       })
@@ -152,6 +137,10 @@ res.send(result)
   }
 }
 run().catch(error=>console.error(error));
+
+app.get('/gallary', (req,res)=>{
+  res.send(galarry)
+  })
 
 
 app.get('/', (req, res)=>{
