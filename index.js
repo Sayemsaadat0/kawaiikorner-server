@@ -54,7 +54,7 @@ async function run() {
   
    if(req.query?.email){
       query = {Seller_email: req.query.email} } 
-    const result = await toyCollection.find(query).toArray()
+    const result = await toyCollection.find(query).limit(20).toArray()
     res.send(result)
           })
 
